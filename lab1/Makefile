@@ -1,25 +1,22 @@
 CC = gcc
-CFLAGS = -Wall -pthread
-SOURCES = main.c  # Assuming only one source file
+CFLAGS = -Wall -Wextra -pthread
+SRC_DIR = src
+BIN_DIR = bin
 
-# Object file (automatically generated)
-OBJECTS = $(SOURCES:.c=.o)
+.PHONY: all clean
 
-# Executable name
-EXEC = vecthread
+all: $(BIN_DIR)/vec_pthread
 
-.PHONY: all clean run
+$(BIN_DIR)/vec_pthread: $(SRC_DIR)/main.c | $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $<
 
-all: $(EXEC)
+run: $(BIN_DIR)/vec_pthread
+	$< $(ARGS) 
 
-$(OBJECTS): $(SOURCES)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(EXEC): $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -lpthread -o $@
-
-run: $(EXEC)
-	./$(EXEC)
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
 
 clean:
-	rm -f $(OBJECTS) $(EXEC)C = gcc
+	rm -rf $(BIN_DIR)
+
+
