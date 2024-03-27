@@ -65,5 +65,6 @@ int main(int argc, char* argv[]){
     pthread_join(tid[i], NULL);
   }
   print_vetor(vec, vecTam);
+  free(vec);
   return 0;
 }
