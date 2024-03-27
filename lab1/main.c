@@ -10,16 +10,26 @@ typedef struct{
 
 void* quadrado(void* args){
   vecStruct* argumentos = (vecStruct*) args;
-
   int i = argumentos->offset;
+
+  printf("%d \n", i);
   int N = argumentos->vecSamples;
   int* vetor = argumentos->vec;
-
   for (; i < N; i++){
     vetor[i] *= vetor[i];
   }
   pthread_exit(NULL);
 
+}
+
+void print_vetor(int* vec, int vecTam){
+  printf("[");
+    for (int i = 0; i < vecTam; i++) {
+      printf("%d", vec[i]);
+      if (i < vecTam - 1)
+        printf(", ");
+    }
+    printf("]\n");
 }
 
 void cria_vetor(int* vec, int vecTam){
@@ -35,8 +45,9 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
-  int vecTam = atoi(argv[0]);
-  int nThreads = atoi(argv[1]);
+  int vecTam = atoi(argv[1]);
+  int nThreads = atoi(argv[2]);
+  
 
   if (vecTam < nThreads){
     printf("Vetor < numero de threads");
@@ -47,17 +58,23 @@ int main(int argc, char *argv[]){
   pthread_t tid[nThreads];
   
   cria_vetor(vec, vecTam);
-
+  print_vetor(vec, vecTam);
+  int vecSamples = vecTam / nThreads;
+  vecStruct args = {vec, 0, vecSamples};
+  
   for (int i = 0; i < nThreads; i++){
-    int vecSamples = vecTam / nThreads;
-    vecStruct args = {vec, i, vecSamples};
+    printf("for %d\n", i);
+    args.offset = i;
     if (i == nThreads - 1){
-      vecStruct args = {vec, i, vecTam};
+      args.vecSamples = vecTam;
     }
-
     pthread_create(&tid[i], NULL, quadrado, (void*) &args);
-  }
-  pthread_exit(NULL);
 
+  }
+  for (int i = 0; i < nThreads; i++){
+    pthread_join(tid[i], NULL);
+  }
+  print_vetor(args.vec, vecTam);
+  free(vec);
   return 0;
 }
