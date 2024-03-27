@@ -6,10 +6,12 @@ typedef struct{
   int* vec;
   int offset;
   int vecSamples;
+  pthread_mutex_t mutex;
 } vecStruct;
 
 void* quadrado(void* args){
   vecStruct* argumentos = (vecStruct*) args;
+  //pthread_mutex_lock(&argumentos->mutex);
   int i = argumentos->offset;
 
   printf("%d \n", i);
@@ -18,6 +20,8 @@ void* quadrado(void* args){
   for (; i < N; i++){
     vetor[i] *= vetor[i];
   }
+  //pthread_mutex_unlock(&argumentos->mutex);
+
   pthread_exit(NULL);
 
 }
@@ -60,14 +64,12 @@ int main(int argc, char *argv[]){
   cria_vetor(vec, vecTam);
   print_vetor(vec, vecTam);
   int vecSamples = vecTam / nThreads;
-  vecStruct args = {vec, 0, vecSamples};
+  vecStruct args = {vec, 0, 0, PTHREAD_MUTEX_INITIALIZER};
   
   for (int i = 0; i < nThreads; i++){
     printf("for %d\n", i);
-    args.offset = i;
-    if (i == nThreads - 1){
-      args.vecSamples = vecTam;
-    }
+    args.offset = i * vecSamples;
+    args.vecSamples = (i + 1) * vecSamples;
     pthread_create(&tid[i], NULL, quadrado, (void*) &args);
 
   }
