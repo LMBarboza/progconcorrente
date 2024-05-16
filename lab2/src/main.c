@@ -5,12 +5,19 @@
 float vector;
 float globalSum;
 int nThreads;
+int sizeVector;
 
 pthread_mutex_t mutex;
 
+typedef struct {
+  int offset;
+  int block;
+} tArgs;
+
 void* addVector(void* arg) {
-  int offset = *(size_t) arg; 
-  int block = sizeVector / nThreads;
+  tArgs args = *(tArgs*) arg; 
+  int offset = args.offset;
+  int block = args.block;
   float localSum = 0;
   
   if (offset != nThreads - 1) {
@@ -38,9 +45,18 @@ int main(int argc, char* argv[]) {
 
   nThreads = atoi(argv[1]);
   pthread_t tid[nThreads];
+  int sizeBlock = sizeVector / nThreads;
 
   for (size_t i = 0; i < nThreads; i++){
-    pthread_create(&tid[i], NULL, addVector, (void*) &tid[i]);
+    tArgs* args = (tArgs*) malloc(sizeof(tArgs));
+
+    if (args == NULL) {
+        printf("Erro malloc \n");
+        pthred_exit(NULL);
+      }
+    args->offset = i;
+    args->block = sizeBlock;
+    pthread_create(&tid[i], NULL, addVector, (void*) args);
   }
 
   for (size_t i = 0; i < nThreads; i++){
