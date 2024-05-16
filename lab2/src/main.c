@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h> 
-#include <pthreads.h>
+#include <pthread.h>
 
 float vector;
 float globalSum;
