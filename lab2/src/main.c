@@ -2,8 +2,10 @@
 #include <stdlib.h> 
 #include <pthread.h>
 
-float vector;
+float* vector;
+/*
 float globalSum;
+*/
 int nThreads;
 int sizeVector;
 
@@ -29,11 +31,12 @@ void* addVector(void* arg) {
     for (size_t i = block * offset; i < sizeVector; i++) {
       localSum += vector[i];
   }
-  pthread_mutex_lock(&mutex);
+  /*pthread_mutex_lock(&mutex);
   globalSum += localSum;
   pthread_mutex_unlock(&mutex);
 
-  return NULL;
+  return NULL;*/
+  pthread((void*) localSum);
 }
 
 
@@ -45,8 +48,14 @@ int main(int argc, char* argv[]) {
 
   nThreads = atoi(argv[1]);
   pthread_t tid[nThreads];
-  int sizeBlock = sizeVector / nThreads;
+  float globalSum = 0;
+  float* results = (float*) malloc(sizeof(float) * nThreads);
+  if (results == NULL) {
+      printf("Erro malloc \n");
+    }
 
+  int sizeBlock = sizeVector / nThreads;
+  
   for (size_t i = 0; i < nThreads; i++){
     tArgs* args = (tArgs*) malloc(sizeof(tArgs));
 
@@ -60,8 +69,10 @@ int main(int argc, char* argv[]) {
   }
 
   for (size_t i = 0; i < nThreads; i++){
-    pthread_join(&tid[i], NULL);
+    pthread_join(&tid[i], (void**) &results);
+    globalSum += results[i];
   }
-
+  
+  free(results);
   return 0;
 }
