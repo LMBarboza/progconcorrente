@@ -71,10 +71,10 @@ int main(int argc, char *argv[]) {
   float globalSum = 0;
   float **results = (float **)malloc(nThreads * sizeof(float *));
 
-  /*if (results == NULL) {
+  if (results == NULL) {
     printf("Erro malloc \n");
     return 1;
-  }*/
+  }
 
   fscanf(file, "%d", &sizeVector);
 
@@ -119,5 +119,6 @@ int main(int argc, char *argv[]) {
   printf("Soma Correta: %f \n", somaCorreta);
 
   free(vector);
+  free(results);
   return 0;
 }
