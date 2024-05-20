@@ -17,7 +17,7 @@ void sgemm(tMatriz *A, tMatriz *B, tMatriz *C) {
 
 int main(int argc, char *argv[]) {
   FILE *descritorArquivo; // descritor do arquivo de saida
-  size_t ret;
+  int ret;
   if (argc != 4) {
     printf("Numero de argumentos errado \n");
     return 1;

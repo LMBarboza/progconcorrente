@@ -9,7 +9,7 @@ typedef struct {
 tMatriz *le_matriz(const char *nomeArquivo) {
   long long int tam; // qtde de elementos na matriz
   FILE *descritorArquivo;
-  size_t ret; // retorno da funcao de leitura no arquivo de entrada
+  int ret; // retorno da funcao de leitura no arquivo de entrada
   // recebe os argumentos de entrada
   tMatriz *matriz = (tMatriz *)malloc(sizeof(tMatriz));
   // abre o arquivo para leitura binaria
