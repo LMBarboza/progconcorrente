@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
   int linhas, colunas;    // dimensoes da matriz
   long long int tam;      // qtde de elementos na matriz
   FILE *descritorArquivo; // descritor do arquivo de saida
-  size_t ret;             // retorno da funcao de escrita no arquivo de saida
+  int ret;             // retorno da funcao de escrita no arquivo de saida
 
   // recebe os argumentos de entrada
   if (argc < 4) {
