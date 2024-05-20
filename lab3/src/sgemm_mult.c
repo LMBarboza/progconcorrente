@@ -1,4 +1,3 @@
-
 #include "../include/le_matriz.h"
 #include "../include/timer.h"
 #include <stdio.h>
@@ -8,25 +7,33 @@ tMatriz *t_matrizA;
 tMatriz *t_matrizB;
 tMatriz *t_matrizC;
 
+typedef struct tArgs {
+  int startBlock;
+  int endBlock;
+} tArgs;
+
 void *sgemm(void *args) {
-  for (int i = 0; i < A->linhas; i++) {
-    for (int j = 0; j < B->colunas; j++) {
-      C->matriz[i * B->colunas + j] = 0;
+  tArgs *arg = *(tArgs *)args;
+  for (int i = arg->startBlock; i < arg->endBlock; i++) {
+    for (int j = 0; j < A->linhas; j++) {
+      C->matriz[j * B->colunas + i] = 0;
       for (int k = 0; k < B->linhas; k++) {
-        C->matriz[i * B->colunas + j] +=
-            A->matriz[i * A->colunas + k] * B->matriz[k * B->colunas + j];
+        C->matriz[j * B->colunas + i] +=
+            A->matriz[j * A->colunas + k] * B->matriz[k * B->colunas + i];
       }
     }
   }
+
+  pthread_exit(NULL);
+  return NULL;
 }
 
 int main(int argc, char *argv[]) {
   FILE *descritorArquivo; // descritor do arquivo de saida
   int ret;
   double inicio, fim;
-
   GET_TIME(inicio);
-  if (argc != 4) {
+  if (argc != 5) {
     printf("Numero de argumentos errado \n");
     return 1;
   }
@@ -41,6 +48,10 @@ int main(int argc, char *argv[]) {
     free(t_matrizA);
     return 1;
   }
+  int nThreads = atoi(argv[3])
+
+      pthread_t tid[nThreads];
+  int colSize = t_matrizB->colunas / nThreads;
   t_matrizC = (tMatriz *)malloc(sizeof(tMatriz));
   if (!t_matrizC) {
     free(t_matrizA);
@@ -61,7 +72,14 @@ int main(int argc, char *argv[]) {
   printf("Inicializacao: %lf \n", fim - inicio);
 
   GET_TIME(inicio);
-  sgemm(t_matrizA, t_matrizB, t_matrizC);
+  for (int i = 0; i < nThreads; i++) {
+    tArgs *args = (tArgs *)malloc(sizeof(tArgs));
+
+    args->startBlock = i * colSize;
+    args->endBlock =
+        i == nThreads - 1 ? t_matrizB->colunas : args->startBlock + colSize;
+    pthread_create(&tid[i], NULL, sgemm, (void *)args);
+  }
   GET_TIME(fim);
   printf("Processamento: %lf \n", fim - inicio);
 
