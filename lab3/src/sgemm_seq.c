@@ -18,6 +18,9 @@ void sgemm(tMatriz *A, tMatriz *B, tMatriz *C) {
 int main(int argc, char *argv[]) {
   FILE *descritorArquivo; // descritor do arquivo de saida
   int ret;
+  double inicio, fim, delta;
+
+  GET_TIME(inicio);
   if (argc != 4) {
     printf("Numero de argumentos errado \n");
     return 1;
@@ -49,9 +52,15 @@ int main(int argc, char *argv[]) {
     free(t_matrizC);
     return 1;
   }
+  GET_TIME(fim);
+  printf("Inicializacao: %lf \n", fim - inicio);
 
+  GET_TIME(inicio);
   sgemm(t_matrizA, t_matrizB, t_matrizC);
+  GET_TIME(fim);
+  printf("Processamento: %lf \n", fim - inicio);
 
+  GET_TIME(inicio);
   descritorArquivo = fopen(argv[3], "wb");
   if (!descritorArquivo) {
     fprintf(stderr, "Erro de abertura do arquivo\n");
@@ -74,5 +83,7 @@ int main(int argc, char *argv[]) {
   free(t_matrizC->matriz);
   free(t_matrizC);
 
+  GET_TIME(fim);
+  printf("Finalizacao: %lf \n", fim - inicio);
   return 0;
 }
