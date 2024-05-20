@@ -18,7 +18,7 @@ void sgemm(tMatriz *A, tMatriz *B, tMatriz *C) {
 int main(int argc, char *argv[]) {
   FILE *descritorArquivo; // descritor do arquivo de saida
   int ret;
-  double inicio, fim, delta;
+  double inicio, fim;
 
   GET_TIME(inicio);
   if (argc != 4) {
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
   GET_TIME(inicio);
   sgemm(t_matrizA, t_matrizB, t_matrizC);
   GET_TIME(fim);
-  printf("Processamento: %lf \n", fim - inicio);
+  printf("Processamento: %lf \n", fim - inicio); 
 
   GET_TIME(inicio);
   descritorArquivo = fopen(argv[3], "wb");
