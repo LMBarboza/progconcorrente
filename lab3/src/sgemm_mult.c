@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 
   GET_TIME(inicio);
   for (int i = 0; i < nThreads; i++) {
-    pthread_join(pid[i], NULL);
+    pthread_join(tid[i], NULL);
   }
   descritorArquivo = fopen(argv[3], "wb");
   if (!descritorArquivo) {
