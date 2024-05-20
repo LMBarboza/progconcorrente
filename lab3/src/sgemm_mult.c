@@ -1,8 +1,8 @@
 #include "../include/le_matriz.h"
 #include "../include/timer.h"
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
 
 tMatriz *t_matrizA;
 tMatriz *t_matrizB;
@@ -86,6 +86,9 @@ int main(int argc, char *argv[]) {
   printf("Processamento: %lf \n", fim - inicio);
 
   GET_TIME(inicio);
+  for (int i = 0; i < nThreads; i++) {
+    pthread_join(pid[i], NULL);
+  }
   descritorArquivo = fopen(argv[3], "wb");
   if (!descritorArquivo) {
     fprintf(stderr, "Erro de abertura do arquivo\n");
