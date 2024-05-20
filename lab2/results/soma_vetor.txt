@@ -1,0 +1,7 @@
+vector[i] = 29.333334
+vector[i] = 242.000000
+vector[i] = -255.000000
+vector[i] = 124.000000
+vector[i] = -146.000000
+Soma Pthread: -5.666656 
+Soma Correta: -5.666656 
