@@ -2,6 +2,7 @@
 #include "../include/timer.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 tMatriz *t_matrizA;
 tMatriz *t_matrizB;
@@ -13,13 +14,14 @@ typedef struct tArgs {
 } tArgs;
 
 void *sgemm(void *args) {
-  tArgs *arg = *(tArgs *)args;
+  tArgs *arg = (tArgs *)args;
   for (int i = arg->startBlock; i < arg->endBlock; i++) {
-    for (int j = 0; j < A->linhas; j++) {
-      C->matriz[j * B->colunas + i] = 0;
-      for (int k = 0; k < B->linhas; k++) {
-        C->matriz[j * B->colunas + i] +=
-            A->matriz[j * A->colunas + k] * B->matriz[k * B->colunas + i];
+    for (int j = 0; j < t_matrizA->linhas; j++) {
+      t_matrizC->matriz[j * t_matrizB->colunas + i] = 0;
+      for (int k = 0; k < t_matrizB->linhas; k++) {
+        t_matrizC->matriz[j * t_matrizB->colunas + i] +=
+            t_matrizA->matriz[j * t_matrizA->colunas + k] *
+            t_matrizB->matriz[k * t_matrizB->colunas + i];
       }
     }
   }
@@ -48,9 +50,9 @@ int main(int argc, char *argv[]) {
     free(t_matrizA);
     return 1;
   }
-  int nThreads = atoi(argv[3])
+  int nThreads = atoi(argv[4]);
 
-      pthread_t tid[nThreads];
+  pthread_t tid[nThreads];
   int colSize = t_matrizB->colunas / nThreads;
   t_matrizC = (tMatriz *)malloc(sizeof(tMatriz));
   if (!t_matrizC) {
