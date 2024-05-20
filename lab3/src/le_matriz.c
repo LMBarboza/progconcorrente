@@ -42,12 +42,6 @@ tMatriz *le_matriz(const char *nomeArquivo) {
     fprintf(stderr, "Erro de leitura dos elementos da matriz\n");
   }
 
-  // imprime a matriz na saida padrao
-  for (int i = 0; i < matriz->linhas; i++) {
-    for (int j = 0; j < matriz->colunas; j++)
-      fprintf(stdout, "%.6f ", matriz->matriz[i * matriz->colunas + j]);
-    fprintf(stdout, "\n");
-  }
   fclose(descritorArquivo);
   return matriz;
 }

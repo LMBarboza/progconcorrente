@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TEXTO
 
 int main(int argc, char *argv[]) {
   float *matriz;          // matriz que será gerada
