@@ -17,4 +17,7 @@ run_seq: bin/sgemm_seq.out
 	 
 
 run_mult: bin/sgemm_mult.out 
-	$< matrix/matrix1 matrix/matrix2 results/mult_result 4
+	$< matrix/matrix1 matrix/matrix2 results/mult_result 8
+
+test:
+	diff results/seq_result results/mult_result
