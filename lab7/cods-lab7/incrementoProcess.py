@@ -43,16 +43,3 @@ if __name__ == '__main__':
         p.join()
         #exibe o valor da variavel
     print("Main: variavel = ", var.getValor())   
-
-
-
-
-
-
-
-
-
-
-
-
-

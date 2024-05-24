@@ -15,8 +15,8 @@ if __name__ == '__main__':
     threads = [MuchCPU() for f in range(cpu_count())]
     start = time.time()
     for t in threads:
-        #t.start()
-        t.run()
-    #for t in threads:
-    #    t.join()
+        t.start()
+        #t.run()
+    for t in threads:
+        t.join()
     print('work took {} seconds'.format(time.time() - start))
