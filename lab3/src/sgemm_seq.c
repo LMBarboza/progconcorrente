@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   tMatriz *t_matrizA = le_matriz(argv[1]);
-  if (!t_matrizA){
+  if (!t_matrizA) {
     printf("erro");
     return 1;
   }
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
   GET_TIME(inicio);
   sgemm(t_matrizA, t_matrizB, t_matrizC);
   GET_TIME(fim);
-  printf("Processamento: %lf \n", fim - inicio); 
+  printf("Processamento: %lf \n", fim - inicio);
 
   GET_TIME(inicio);
   descritorArquivo = fopen(argv[3], "wb");
