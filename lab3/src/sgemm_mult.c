@@ -15,17 +15,18 @@ typedef struct tArgs {
 
 void *sgemm(void *args) {
   tArgs *arg = (tArgs *)args;
+  float sum;
   for (int i = arg->startBlock; i < arg->endBlock; i++) {
     for (int j = 0; j < t_matrizA->linhas; j++) {
-      t_matrizC->matriz[j * t_matrizB->colunas + i] = 0;
-      for (int k = 0; k < t_matrizB->linhas; k++) {
-        t_matrizC->matriz[j * t_matrizB->colunas + i] +=
-            t_matrizA->matriz[j * t_matrizA->colunas + k] *
-            t_matrizB->matriz[k * t_matrizB->colunas + i];
+      sum = 0;
+      for (int k = 0; k < t_matrizA->colunas; k++) {
+        sum += t_matrizA->matriz[i * t_matrizA->colunas + k] *
+               t_matrizB->matriz[k * t_matrizB->colunas + j];
+        t_matrizC->matriz[i * t_matrizB->colunas + j] = sum;
       }
     }
   }
-
+  free(arg);
   pthread_exit(NULL);
   return NULL;
 }
@@ -80,15 +81,19 @@ int main(int argc, char *argv[]) {
     args->startBlock = i * colSize;
     args->endBlock =
         i == nThreads - 1 ? t_matrizB->colunas : args->startBlock + colSize;
+
     pthread_create(&tid[i], NULL, sgemm, (void *)args);
   }
+
+
+  for (int i = 0; i < nThreads; i++) {
+    pthread_join(tid[i], NULL);
+  }
+
   GET_TIME(fim);
   printf("Processamento: %lf \n", fim - inicio);
 
   GET_TIME(inicio);
-  for (int i = 0; i < nThreads; i++) {
-    pthread_join(tid[i], NULL);
-  }
   descritorArquivo = fopen(argv[3], "wb");
   if (!descritorArquivo) {
     fprintf(stderr, "Erro de abertura do arquivo\n");
