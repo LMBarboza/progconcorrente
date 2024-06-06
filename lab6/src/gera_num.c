@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-int main(int arc, char *argv[]) {
+int main(int argc, char *argv[]) {
   long long int *listaNum;
   int N, ret;
   FILE *descritorArquivo;
@@ -12,7 +13,7 @@ int main(int arc, char *argv[]) {
   }
 
   N = atoi(argv[1]);
-  listaNum = (long long int)malloc(sizeof(long long int) * N);
+  listaNum = (long long int *)malloc(sizeof(long long int) * N);
   if (!listaNum) {
     fprintf(stderr, "Erro de alocao da memoria da matriz\n");
     return 2;
