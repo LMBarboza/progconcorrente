@@ -19,7 +19,7 @@ int main(int arc, char *argv[]) {
   }
 
   srand(time(NULL));
-  for (int = 0; i < N; i++) {
+  for (int i = 0; i < N; i++) {
     listaNum[i] = rand();
   }
 
