@@ -1,5 +1,7 @@
-tInteiros *le_lista(const char *nomeArquivo);
 typedef struct {
   int N;
-  float *listaNum;
+  long long int *listaNum;
 } tInteiros;
+
+tInteiros *le_lista(const char *nomeArquivo);
+
