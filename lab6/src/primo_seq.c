@@ -1,6 +1,7 @@
 #include "../include/le_num.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 int ehPrimo(long long int n) {
   int i;
@@ -17,16 +18,14 @@ int ehPrimo(long long int n) {
 }
 
 int main(int argc, char *argv[]) {
-  FILE *descritorArquivo;
-  int ret;
-  int numPrimos;
+  int numPrimos = 0;
 
   if (argc != 2) {
     printf("Numero de argumentos errado \n");
     return 1;
   }
   
-  tInteiros *listaInteiros = le_num(argv[1]);
+  tInteiros *listaInteiros = le_lista(argv[1]);
   
   for (int i = 0; i < listaInteiros->N; i++) {
     numPrimos += ehPrimo(listaInteiros->listaNum[i]);

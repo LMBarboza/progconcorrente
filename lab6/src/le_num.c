@@ -3,11 +3,10 @@
 
 typedef struct {
   int N;
-  float *listaNum;
+  long long int*listaNum;
 } tInteiros;
 
 tInteiros *le_lista(const char *nomeArquivo) {
-  int N; 
   FILE *descritorArquivo;
   int ret; // retorno da funcao de leitura no arquivo de entrada
   // recebe os argumentos de entrada
@@ -32,7 +31,7 @@ tInteiros *le_lista(const char *nomeArquivo) {
 
   // carrega a listaNum de elementos do tipo float do arquivo
   ret = fread(listaNum->listaNum, sizeof(long long int), listaNum->N, descritorArquivo);
-  if (ret < tam) {
+  if (ret < listaNum->N) {
     fprintf(stderr, "Erro de leitura dos elementos da listaNum\n");
   }
 
